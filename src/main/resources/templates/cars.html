@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cars</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0-alpha2/dist/css/bootstrap.css}">
+
+</head>
+<body style="background-color: #35363a">
+
+<div class="container">
+<table class="table table-sm table-bordered">
+    <thead class="table-dark">
+    <tr>
+        <th>id</th>
+        <th>Model</th>
+        <th>Release year</th>
+        <th>Price</th>
+        <th>Registration number</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody style="color: snow;">
+    <tr th:each="s:${cars}">
+        <td th:text="${s.id}"></td>
+        <td th:text="${s.model}"></td>
+        <td th:text="${s.releaseYear}"></td>
+        <td th:text="${s.price}"></td>
+        <td th:text="${s.registrationNumber}"></td>
+        <td>
+            <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+               data-bs-target="#confirm"
+               th:attr="data-bs-link=@{/delete_car(id=${s.id})}, data-bs-text=${s.model}, data-bs-id=${s.id}">delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="modal fade" id="confirm" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticWarningLabel">Warning</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete car?<br/>
+                If you click <b>Delete</b>, this action <i>cannot be undone</i>.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark bullet-button" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <a class="btn btn-danger bullet-button">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var myConfigModal = document.getElementById('confirm')
+    myConfigModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var link = button.getAttribute('data-bs-link')
+        var sid = button.getAttribute('data-bs-id')
+        var text = button.getAttribute('data-bs-text')
+        var modalTitle = myConfigModal.querySelector('.modal-title')
+        modalTitle.textContent = 'Deleting car: ' + text + ' (' + sid + ')'
+        var deleteButton = myConfigModal.querySelector('.delete-button')
+        deleteButton.setAttribute("href", link)
+    })
+</script>
+<form action="add_car" method="post" >
+    <input type="number" name="car_id" placeholder="Id">
+    <input type="text" name="car_model" placeholder="Model">
+    <input type="number" name="car_releaseYear" placeholder="Release year">
+    <input type="number" name="car_price" placeholder="Price">
+    <input type="text" name="car_registrationNumber" placeholder="Registration number">
+    <input type="submit" value="Add" class="btn btn-primary btn-sm">
+</form>
+
+<a href="save_cars" class="btn btn-primary bullet-button" >Write</a>
+<a href="read_cars" class="btn btn-primary bullet-button" >Read</a>
+
+<form action="sort_by_model" method="post"><table>
+    <td><input type="text" name="model" placeholder="model" class="input-group-text"></td>
+    <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
+</form>
+<form action="sort_by_model_and_year" method="post"><table>
+    <td><input type="text" name="model" placeholder="model" class="input-group-text"></td>
+    <td><input type="number" name="releaseYear" placeholder="releaseYear" class="input-group-text"></td>
+    <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
+</form>
+<form action="sort_by_price" method="post"><table>
+    <td><input type="number" name="releaseYear" placeholder="releaseYear" class="input-group-text"></td>
+    <td><input type="number" name="price" placeholder="price" class="input-group-text"></td>
+    <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
+</form>
+</div>
+<script th:src="@{/webjars/jquery/3.6.4/dist/jquery.js}"></script>
+<script th:src="@{/webjars/popperjs__core/2.11.7/dist/umd/popper.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.0-alpha2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>
