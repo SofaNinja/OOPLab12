@@ -35,19 +35,20 @@ public class CarService {
     }
 
     public void deleteById(int id) {
-        cars.removeIf(s -> s.getId() == id);
+        cars.removeIf(c -> c.getId() == id);
     }
 
     public void save() {
         try (PrintWriter out = new PrintWriter("cars.txt")) {
-            for (Car s : cars) {
-                out.println(s.getId() + "," + s.getModel() + "," + s.getReleaseYear() + ","
-                        + s.getPrice() + "," + s.getRegistrationNumber());
+            for (Car car : cars) {
+                out.println(car.getId() + "," + car.getModel() + "," + car.getReleaseYear() + ","
+                        + car.getPrice() + "," + car.getRegistrationNumber());
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
     public void read() {
         try (BufferedReader reader = Files.newBufferedReader(Path.of("cars.txt"))) {
             cars = new ArrayList<>(reader.lines().map(line -> {

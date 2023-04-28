@@ -21,53 +21,54 @@
     </tr>
     </thead>
     <tbody style="color: snow;">
-    <tr th:each="s:${cars}">
-        <td th:text="${s.id}"></td>
-        <td th:text="${s.model}"></td>
-        <td th:text="${s.releaseYear}"></td>
-        <td th:text="${s.price}"></td>
-        <td th:text="${s.registrationNumber}"></td>
+    <tr th:each="c:${cars}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.model}"></td>
+        <td th:text="${c.releaseYear}"></td>
+        <td th:text="${c.price}"></td>
+        <td th:text="${c.registrationNumber}"></td>
         <td>
+            <!--            <a th:href="@{/delete_car(id=${c.id})}" class="btn btn-danger btn-sm">delete</a>-->
             <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
-               data-bs-target="#confirm"
-               th:attr="data-bs-link=@{/delete_car(id=${s.id})}, data-bs-text=${s.model}, data-bs-id=${s.id}">delete</a>
+               data-bs-target="#myconfirm"
+               th:attr="data-bs-link=@{/delete_car(id=${c.id})}, data-bs-text=${c.model}, data-bs-id=${c.id}">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
-<div class="modal fade" id="confirm" data-bs-backdrop="static" data-bs-keyboard="false"
-     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticWarningLabel">Warning</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete car?<br/>
-                If you click <b>Delete</b>, this action <i>cannot be undone</i>.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark bullet-button" data-bs-dismiss="modal">
-                    Cancel
-                </button>
-                <a class="btn btn-danger bullet-button">Delete</a>
+    <div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticWarningLabel">Warning</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to Delete car?<br/>
+                    If you click <b>Delete</b>, this action <i>cannot be undone</i>.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <a class="btn btn-primary delete-button">Delete</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    var myConfigModal = document.getElementById('confirm')
-    myConfigModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget
-        var link = button.getAttribute('data-bs-link')
-        var sid = button.getAttribute('data-bs-id')
-        var text = button.getAttribute('data-bs-text')
-        var modalTitle = myConfigModal.querySelector('.modal-title')
-        modalTitle.textContent = 'Deleting car: ' + text + ' (' + sid + ')'
-        var deleteButton = myConfigModal.querySelector('.delete-button')
-        deleteButton.setAttribute("href", link)
-    })
+    <script>
+        var myConfirmModal = document.getElementById('myconfirm')
+        myConfirmModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var link = button.getAttribute('data-bs-link')
+            var cid = button.getAttribute('data-bs-id')
+            var text = button.getAttribute('data-bs-text')
+            var modalTitle = myConfirmModal.querySelector('.modal-title')
+            modalTitle.textContent = 'Deleting car: ' + text + ' (' + cid + ')'
+            var deleteButton = myConfirmModal.querySelector('.delete-button')
+            deleteButton.setAttribute("href", link)
+        })
 </script>
 <form action="add_car" method="post" >
     <input type="number" name="car_id" placeholder="Id">
@@ -82,17 +83,17 @@
 <a href="read_cars" class="btn btn-primary bullet-button" >Read</a>
 
 <form action="sort_by_model" method="post"><table>
-    <td><input type="text" name="model" placeholder="model" class="input-group-text"></td>
+    <td><input type="text" name="model" placeholder="Model" class="input-group-text"></td>
     <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
 </form>
 <form action="sort_by_model_and_year" method="post"><table>
-    <td><input type="text" name="model" placeholder="model" class="input-group-text"></td>
-    <td><input type="number" name="releaseYear" placeholder="releaseYear" class="input-group-text"></td>
+    <td><input type="text" name="model" placeholder="Model" class="input-group-text"></td>
+    <td><input type="number" name="releaseYear" placeholder="Exploitation years" class="input-group-text"></td>
     <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
 </form>
 <form action="sort_by_price" method="post"><table>
-    <td><input type="number" name="releaseYear" placeholder="releaseYear" class="input-group-text"></td>
-    <td><input type="number" name="price" placeholder="price" class="input-group-text"></td>
+    <td><input type="number" name="releaseYear" placeholder="Release year" class="input-group-text"></td>
+    <td><input type="number" name="price" placeholder="Price" class="input-group-text"></td>
     <td><input type="submit" value="Sort" class="btn btn-warning bullet-button"></td></table>
 </form>
 </div>
